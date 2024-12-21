@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="PR8_0202.Elements.Item"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PR8_0202.Elements"
+             mc:Ignorable="d" 
+             MinHeight="200" MinWidth="400">
+    <Border Background="#E6E6E6" CornerRadius="10" Margin="5,5,5,0">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30*"/>
+                <ColumnDefinition Width="60*"/>
+                <ColumnDefinition Width="90*"/>
+                <ColumnDefinition Width="40*"/>
+                <ColumnDefinition Width="40*"/>
+
+            </Grid.ColumnDefinitions>
+            <Label Name="Date" Grid.Column="0" Foreground="#E77728" Height="40" VerticalAlignment="Top" Content="1" FontSize="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Top"/>
+            <Label Name="Today" Grid.Column="1" Content="мая, сегодня" Foreground="Gray" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Height="26" Width="80"/>
+            <Label Name="Pressure" Grid.Column="3" Content="Давление, мм рт.ст." Foreground="Gray" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Height="26" Width="117"/>
+            <Label Name="Humidity" Grid.Column="4" Content="Влажность" Foreground="Gray" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Height="26" Width="69"/>
+        </Grid>
+    </Border>
+</UserControl>
