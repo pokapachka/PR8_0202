@@ -5,8 +5,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PR8_0202"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="MainWindow" Height="450" Width="800" MinHeight="450" MinWidth="800">
+    <Grid Background="#E6E6E6">
+        <Border CornerRadius="0,0,0,20" Height="50" VerticalAlignment="Top" Background="#E77728">
+            <Grid>
+                <Label Name="Weather" Content="Погода" FontWeight="Bold" FontSize="30" Foreground="#E6E6E6" VerticalAlignment="Center" Margin="0,0,70,0" VerticalContentAlignment="Center" HorizontalAlignment="Center"/>
+                <Image Name="Search" Source="/PR8_0202;component/Image/map.png" Width="25" Height="25" HorizontalAlignment="Center" Margin="200,0,0,0" PreviewMouseDown="SearchCity"/>
+                <TextBox Background="#E6E6E6" Width="150" Height="40" Margin="0,0,50,0" Visibility="Hidden" Name="CityTextbox" FontSize="30" LostFocus="LostFocus" GotFocus="GotFocus" KeyDown="KeyDown">
+                    <TextBox.Resources>
+                        <Style TargetType="TextBox">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="TextBox">
+                                        <Border CornerRadius="5" Background="{TemplateBinding Background}" 
+                                            BorderBrush="{TemplateBinding BorderBrush}" 
+                                            BorderThickness="{TemplateBinding BorderThickness}">
+                                            <ScrollViewer x:Name="PART_ContentHost" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+            </Grid>
+        </Border>
+        <Border CornerRadius="20,20,20,20" Height="365" Margin="10,60,10,10" VerticalAlignment="Top" Background="#2D2D34">
+            
+        </Border>
     </Grid>
 </Window>

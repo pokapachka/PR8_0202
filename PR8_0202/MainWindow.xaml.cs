@@ -24,5 +24,34 @@ namespace PR8_0202
         {
             InitializeComponent();
         }
+
+        private void SearchCity(object sender, MouseButtonEventArgs e)
+        {
+            Weather.Visibility = Visibility.Hidden;
+            Search.Visibility = Visibility.Hidden;
+            CityTextbox.Visibility = Visibility.Visible;
+        }
+
+        private void KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                var TextBox = CityTextbox.Text;
+                Weather.Visibility = Visibility.Visible;
+                if (string.IsNullOrWhiteSpace(TextBox))
+                {
+                    Weather.Content = "Погода";
+                }
+                else
+                {
+                    Weather.Content = CityTextbox.Text;
+                }
+                Search.Visibility = Visibility.Visible;
+                CityTextbox.Visibility = Visibility.Hidden;
+            }
+              
+            
+        }
+
     }
 }
