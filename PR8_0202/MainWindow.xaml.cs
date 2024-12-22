@@ -49,8 +49,6 @@ namespace PR8_0202
                 Search.Visibility = Visibility.Visible;
                 CityTextbox.Visibility = Visibility.Hidden;
             }
-            
-            
         }
 
     }
