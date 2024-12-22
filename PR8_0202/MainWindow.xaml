@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PR8_0202"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" MinHeight="450" MinWidth="800" Loaded="Loaded">
+        Title="MainWindow" Height="450" Width="800" MinHeight="450" MinWidth="800" Loaded="LoadedWin">
     <Grid Background="#E6E6E6">
         <Border CornerRadius="0,0,0,20" Height="50" VerticalAlignment="Top" Background="#E77728">
             <Grid>
                 <Label Name="Weather" Content="Погода" FontWeight="Bold" FontSize="30" Foreground="#E6E6E6" VerticalAlignment="Center" Margin="0,0,70,0" VerticalContentAlignment="Center" HorizontalAlignment="Center"/>
                 <Image Name="Search" Source="/PR8_0202;component/Image/map.png" Width="25" Height="25" HorizontalAlignment="Center" Margin="200,0,0,0" PreviewMouseDown="SearchCity"/>
-                <TextBox Background="#E6E6E6" Width="150" Height="40" Margin="0,0,50,0" Visibility="Hidden" Name="CityTextbox" FontSize="30" KeyDown="KeyDown">
+                <TextBox Background="#E6E6E6" Width="200" Height="40" Margin="0,0,0,0" Visibility="Hidden" Name="CityTextbox" FontSize="30" KeyDown="KeyDown">
                     <TextBox.Resources>
                         <Style TargetType="TextBox">
                             <Setter Property="Template">
@@ -32,7 +32,6 @@
         </Border>
         <Border CornerRadius="20,20,20,20" Height="365" Margin="10,60,10,10" VerticalAlignment="Top" Background="#2D2D34">
             <DataGrid x:Name="WeatherDataGrid" AutoGenerateColumns="False" Margin="7" Background="#2D2D34" BorderBrush="#2D2D34" HeadersVisibility="Column" GridLinesVisibility="None" RowBackground="#2D2D34">
-
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="Background" Value="#2D2D34"/>
@@ -41,9 +40,8 @@
                         <Setter Property="FontWeight" Value="Bold"/>
                     </Style>
                 </DataGrid.ColumnHeaderStyle>
-
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Дата и время" Binding="{Binding DateTime}" Width="120"/>
+                    <DataGridTextColumn Header="Дата" Binding="{Binding DateTime}" Width="120"/>
                     <DataGridTextColumn Header="Температура" Binding="{Binding Temperature}" Width="100"/>
                     <DataGridTextColumn Header="Давление" Binding="{Binding Pressure}" Width="100"/>
                     <DataGridTextColumn Header="Влажность" Binding="{Binding Humidity}" Width="100"/>
