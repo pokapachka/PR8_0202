@@ -51,5 +51,9 @@ namespace PR8_0202
             }
         }
 
+        private async void Loaded(object sender, RoutedEventArgs e)
+        {
+            string DC = "Пермь";
+        }
     }
 }
