@@ -97,11 +97,11 @@ namespace PR8_0202
         {
             try
             {
-                int requestCount = WeatherCache.GetRequestCountForToday();
+                int requestCount = WeatherCashe.GetRequestCountForToday();
 
                 if (requestCount >= 500)
                 {
-                    var cachedData = WeatherCache.GetWeatherData(city);
+                    var cachedData = WeatherCashe.GetWeatherData(city);
                     if (cachedData.Count > 0)
                     {
                         WeatherDataGrid.ItemsSource = cachedData;
@@ -118,7 +118,7 @@ namespace PR8_0202
                     WeatherDataGrid.ItemsSource = weatherData;
                     foreach (var data in weatherData)
                     {
-                        WeatherCache.SaveWeatherData(city, data.DateTime, data.Temperature, data.Pressure, data.Humidity, data.WindSpeed, data.FeelsLike, data.WeatherDescription);
+                        WeatherCashe.SaveWeatherData(city, data.DateTime, data.Temperature, data.Pressure, data.Humidity, data.WindSpeed, data.FeelsLike, data.WeatherDescription);
                     }
                 }
             }
