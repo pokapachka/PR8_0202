@@ -63,5 +63,40 @@ namespace PR8_0202.Classes
                 command.ExecuteNonQuery();
             }
         }
+        public static List<Weather> GetWeather(string city)
+        {
+            List<Weather> weatherDataList = new List<Weather>();
+
+            using (var connection = new SQLiteConnection($"Data Source={DbPath};Version=3;"))
+            {
+                connection.Open();
+                string selectQuery = @"
+                SELECT * FROM WeatherData
+                WHERE City = @City AND RequestDate = @RequestDate";
+
+                var command = new SQLiteCommand(selectQuery, connection);
+                command.Parameters.AddWithValue("@City", city);
+                command.Parameters.AddWithValue("@RequestDate", DateTime.Now.ToString("yyyy-MM-dd"));
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        weatherDataList.Add(new Weather
+                        {
+                            DateTime = reader["DateTime"].ToString(),
+                            Temperature = reader["Temperature"].ToString(),
+                            Pressure = reader["Pressure"].ToString(),
+                            Humidity = reader["Humidity"].ToString(),
+                            WindSpeed = reader["WindSpeed"].ToString(),
+                            FeelsLike = reader["FeelsLike"].ToString(),
+                            WeatherDescription = reader["WeatherDescription"].ToString()
+                        });
+                    }
+                }
+            }
+            return weatherDataList;
+        }
+
     }
 }
