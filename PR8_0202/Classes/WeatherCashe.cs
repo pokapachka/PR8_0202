@@ -97,6 +97,21 @@ namespace PR8_0202.Classes
             }
             return weatherDataList;
         }
+        public static int GetRequestCountForToday()
+        {
+            int requestCount = 0;
 
+            using (var connection = new SQLiteConnection($"Data Source={DbPath};Version=3;"))
+            {
+                connection.Open();
+                string selectQuery = "SELECT COUNT(*) FROM WeatherData WHERE RequestDate = @RequestDate";
+                var command = new SQLiteCommand(selectQuery, connection);
+                command.Parameters.AddWithValue("@RequestDate", DateTime.Now.ToString("yyyy-MM-dd"));
+
+                requestCount = Convert.ToInt32(command.ExecuteScalar());
+            }
+
+            return requestCount;
+        }
     }
 }
