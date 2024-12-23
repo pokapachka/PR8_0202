@@ -1,8 +1,9 @@
-﻿using MySql.Data.MySqlClient;
+﻿
+using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,10 +17,10 @@ namespace PR8_0202.Classes
         {
             if (!System.IO.File.Exists(DbPath))
             {
-                MySqlConnection.connect(DbPath);
+                SQLiteConnection.CreateFile(DbPath);
             }
 
-            using (var connection = new MySqlConnection($"Data Source={DbPath};Version=3;"))
+            using (var connection = new SQLiteConnection($"Data Source={DbPath};Version=3;"))
             {
                 connection.Open();
                 string createTableQuery = @"
@@ -35,7 +36,30 @@ namespace PR8_0202.Classes
                     RequestDate TEXT NOT NULL
                 )";
 
-                var command = new MySqlCommand(createTableQuery, connection);
+                var command = new SQLiteCommand(createTableQuery, connection);
+                command.ExecuteNonQuery();
+            }
+        }
+        public static void SaveWeatherData(string city, string dateTime, string temperature, string pressure, string humidity, string windSpeed, string feelsLike, string weatherDescription)
+        {
+            using (var connection = new SQLiteConnection($"Data Source={DbPath};Version=3;"))
+            {
+                connection.Open();
+                string insertQuery = @"
+                INSERT INTO WeatherData (City, DateTime, Temperature, Pressure, Humidity, WindSpeed, FeelsLike, WeatherDescription, RequestDate)
+                VALUES (@City, @DateTime, @Temperature, @Pressure, @Humidity, @WindSpeed, @FeelsLike, @WeatherDescription, @RequestDate)";
+
+                var command = new SQLiteCommand(insertQuery, connection);
+                command.Parameters.AddWithValue("@City", city);
+                command.Parameters.AddWithValue("@DateTime", dateTime);
+                command.Parameters.AddWithValue("@Temperature", temperature);
+                command.Parameters.AddWithValue("@Pressure", pressure);
+                command.Parameters.AddWithValue("@Humidity", humidity);
+                command.Parameters.AddWithValue("@WindSpeed", windSpeed);
+                command.Parameters.AddWithValue("@FeelsLike", feelsLike);
+                command.Parameters.AddWithValue("@WeatherDescription", weatherDescription);
+                command.Parameters.AddWithValue("@RequestDate", DateTime.Now.ToString("yyyy-MM-dd"));
+
                 command.ExecuteNonQuery();
             }
         }
