@@ -29,6 +29,8 @@ namespace PR8_0202
         public MainWindow()
         {
             InitializeComponent();
+            WeatherCashe.InitializeDatabase();
+
         }
 
         private void SearchCity(object sender, MouseButtonEventArgs e)
@@ -38,7 +40,7 @@ namespace PR8_0202
             CityTextbox.Visibility = Visibility.Visible;
         }
 
-        private void KeyDown(object sender, KeyEventArgs e)
+        private async void KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
@@ -55,11 +57,15 @@ namespace PR8_0202
                 }
                 Search.Visibility = Visibility.Visible;
                 CityTextbox.Visibility = Visibility.Hidden;
+                await UpdateWeather(TextBox);
+                UpdateRequestCount();
             }
         }
-        private void LoadedWin(object sender, RoutedEventArgs e)
+        private async void LoadedWin(object sender, RoutedEventArgs e)
         {
             string DC = "Пермь";
+            await UpdateWeather(DC);
+            UpdateRequestCount();
         }
         private async Task<List<Weather>> FetchWeatherData(string city)
         {
@@ -93,15 +99,20 @@ namespace PR8_0202
                 return weatherList;
             }
         }
+        private void UpdateRequestCount()
+        {
+            int requestCount = WeatherCashe.GetRequestCountForToday();
+            RequestCountLabel.Content = $"Количество запросов сегодня: {requestCount}";
+        }
         private async Task UpdateWeather(string city)
         {
             try
             {
                 int requestCount = WeatherCashe.GetRequestCountForToday();
 
-                if (requestCount >= 500)
+                if (requestCount >= 1000)
                 {
-                    var cachedData = WeatherCashe.GetWeatherData(city);
+                    var cachedData = WeatherCashe.GetWeather(city);
                     if (cachedData.Count > 0)
                     {
                         WeatherDataGrid.ItemsSource = cachedData;
