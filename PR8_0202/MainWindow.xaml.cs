@@ -129,7 +129,8 @@ namespace PR8_0202
                     WeatherDataGrid.ItemsSource = weatherData;
                     foreach (var data in weatherData)
                     {
-                        WeatherCashe.SaveWeatherData(city, data.DateTime, data.Temperature, data.Pressure, data.Humidity, data.WindSpeed, data.FeelsLike, data.WeatherDescription);
+                        WeatherCashe.SaveWeatherData(city, data.DateTime, data.Temperature, data.Pressure, data.Humidity, 
+                            data.WindSpeed, data.FeelsLike, data.WeatherDescription);
                     }
                 }
             }

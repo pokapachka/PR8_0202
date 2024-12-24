@@ -40,7 +40,8 @@ namespace PR8_0202.Classes
                 command.ExecuteNonQuery();
             }
         }
-        public static void SaveWeatherData(string city, string dateTime, string temperature, string pressure, string humidity, string windSpeed, string feelsLike, string weatherDescription)
+        public static void SaveWeatherData(string city, string dateTime, string temperature, string pressure, 
+            string humidity, string windSpeed, string feelsLike, string weatherDescription)
         {
             using (var connection = new SQLiteConnection($"Data Source={DbPath};Version=3;"))
             {
