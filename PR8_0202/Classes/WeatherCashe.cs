@@ -11,11 +11,10 @@ namespace PR8_0202.Classes
 {
     public class WeatherCashe
     {
-        private const string DbPath = "weatherCache.db";
+        private const string DbPath = "Cache.db";
         
         public static void InitializeDatabase()
         {
-
             if (!System.IO.File.Exists(DbPath))
             {
                 SQLiteConnection.CreateFile(DbPath);
@@ -25,32 +24,83 @@ namespace PR8_0202.Classes
             {
                 connection.Open();
                 string createTableQuery = @"
-                CREATE TABLE IF NOT EXISTS WeatherData (
-                    City TEXT NOT NULL,
-                    DateTime TEXT NOT NULL,
-                    Temperature TEXT,
-                    Pressure TEXT,
-                    Humidity TEXT,
-                    WindSpeed TEXT,
-                    FeelsLike TEXT,
-                    WeatherDescription TEXT,
-                    RequestDate TEXT NOT NULL
-                )";
-
+        CREATE TABLE IF NOT EXISTS WeatherData (
+            City TEXT NOT NULL,
+            DateTime TEXT NOT NULL,
+            Temperature TEXT,
+            Pressure TEXT,
+            Humidity TEXT,
+            WindSpeed TEXT,
+            FeelsLike TEXT,
+            WeatherDescription TEXT,
+            RequestDate TEXT NOT NULL
+        )";
                 var command = new SQLiteCommand(createTableQuery, connection);
                 command.ExecuteNonQuery();
+
+                string createRequestTableQuery = @"
+        CREATE TABLE IF NOT EXISTS RequestLog (
+            RequestTime TEXT NOT NULL
+        )";
+                var command2 = new SQLiteCommand(createRequestTableQuery, connection);
+                command2.ExecuteNonQuery();
             }
+        }
+        public static void LoadRequestTimes()
+        {
+            requestTime.Clear();
+
+            using (var connection = new SQLiteConnection($"Data Source={DbPath};Version=3;"))
+            {
+                connection.Open();
+                string selectQuery = "SELECT RequestTime FROM RequestLog";
+
+                var command = new SQLiteCommand(selectQuery, connection);
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        DateTime timestamp = DateTime.Parse(reader["RequestTime"].ToString());
+                        requestTime.Add(timestamp);
+                    }
+                }
+            }
+            DateTime twoHoursAgo = DateTime.Now.AddHours(-2);
+            requestTime.RemoveAll(timestamp => timestamp < twoHoursAgo);
         }
         private static List<DateTime> requestTime = new List<DateTime>();
         public static int GetRequestCountTwoHours()
         {
             DateTime twoHoursAgo = DateTime.Now.AddHours(-2);
+
+            using (var connection = new SQLiteConnection($"Data Source={DbPath};Version=3;"))
+            {
+                connection.Open();
+                string deleteQuery = "DELETE FROM RequestLog WHERE RequestTime < @TwoHoursAgo";
+                var deleteCommand = new SQLiteCommand(deleteQuery, connection);
+                deleteCommand.Parameters.AddWithValue("@TwoHoursAgo", twoHoursAgo.ToString("yyyy-MM-dd HH:mm:ss"));
+                deleteCommand.ExecuteNonQuery();
+            }
+
             requestTime.RemoveAll(timestamp => timestamp < twoHoursAgo);
             return requestTime.Count;
         }
         public static void IncrementRecuestCount()
         {
-            requestTime.Add(DateTime.Now);
+            DateTime now = DateTime.Now;
+            requestTime.Add(now);
+
+            using (var connection = new SQLiteConnection($"Data Source={DbPath};Version=3;"))
+            {
+                connection.Open();
+                string insertQuery = @"
+        INSERT INTO RequestLog (RequestTime)
+        VALUES (@RequestTime)";
+
+                var command = new SQLiteCommand(insertQuery, connection);
+                command.Parameters.AddWithValue("@RequestTime", now.ToString("yyyy-MM-dd HH:mm:ss"));
+                command.ExecuteNonQuery();
+            }
         }
         public static void SaveWeatherData(string city, string dateTime, string temperature, string pressure, 
             string humidity, string windSpeed, string feelsLike, string weatherDescription)
@@ -109,22 +159,6 @@ namespace PR8_0202.Classes
                 }
             }
             return weatherDataList;
-        }
-        public static int GetRequestCountForToday()
-        {
-            int requestCount = 0;
-
-            using (var connection = new SQLiteConnection($"Data Source={DbPath};Version=3;"))
-            {
-                connection.Open();
-                string selectQuery = "SELECT COUNT(*) FROM WeatherData WHERE RequestDate = @RequestDate";
-                var command = new SQLiteCommand(selectQuery, connection);
-                command.Parameters.AddWithValue("@RequestDate", DateTime.Now.ToString("yyyy-MM-dd"));
-
-                requestCount = Convert.ToInt32(command.ExecuteScalar());
-            }
-
-            return requestCount;
         }
     }
 }

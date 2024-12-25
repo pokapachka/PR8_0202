@@ -30,6 +30,7 @@ namespace PR8_0202
         {
             InitializeComponent();
             WeatherCashe.InitializeDatabase();
+            WeatherCashe.LoadRequestTimes();
 
         }
 
@@ -102,7 +103,7 @@ namespace PR8_0202
         private void UpdateRequestCount()
         {
             int requestCount = WeatherCashe.GetRequestCountTwoHours();
-            RequestCountLabel.Content = $"Количество запросов сегодня: {requestCount}";
+            RequestCountLabel.Content = $"Количество запросов сегодня: {requestCount}/5";
         }
 
         private async Task UpdateWeather(string city)
@@ -110,7 +111,7 @@ namespace PR8_0202
             try
             {
                 int requestCount = WeatherCashe.GetRequestCountTwoHours();
-                if (requestCount >= 400)
+                if (requestCount >= 5)
                 {
                     var cachedData = WeatherCashe.GetWeather(city);
                     if (cachedData.Count > 0)
@@ -132,8 +133,9 @@ namespace PR8_0202
                         WeatherCashe.SaveWeatherData(city, data.DateTime, data.Temperature, data.Pressure, data.Humidity, 
                             data.WindSpeed, data.FeelsLike, data.WeatherDescription);
                     }
+                    WeatherCashe.IncrementRecuestCount();
                 }
-                WeatherCashe.IncrementRecuestCount();
+
             }
             catch (Exception ex)
             {
