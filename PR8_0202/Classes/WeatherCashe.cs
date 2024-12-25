@@ -15,6 +15,7 @@ namespace PR8_0202.Classes
         
         public static void InitializeDatabase()
         {
+
             if (!System.IO.File.Exists(DbPath))
             {
                 SQLiteConnection.CreateFile(DbPath);
@@ -39,6 +40,17 @@ namespace PR8_0202.Classes
                 var command = new SQLiteCommand(createTableQuery, connection);
                 command.ExecuteNonQuery();
             }
+        }
+        private static List<DateTime> requestTime = new List<DateTime>();
+        public static int GetRequestCountTwoHours()
+        {
+            DateTime twoHoursAgo = DateTime.Now.AddHours(-2);
+            requestTime.RemoveAll(timestamp => timestamp < twoHoursAgo);
+            return requestTime.Count;
+        }
+        public static void IncrementRecuestCount()
+        {
+            requestTime.Add(DateTime.Now);
         }
         public static void SaveWeatherData(string city, string dateTime, string temperature, string pressure, 
             string humidity, string windSpeed, string feelsLike, string weatherDescription)

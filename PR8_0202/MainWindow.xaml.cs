@@ -101,16 +101,16 @@ namespace PR8_0202
         }
         private void UpdateRequestCount()
         {
-            int requestCount = WeatherCashe.GetRequestCountForToday();
+            int requestCount = WeatherCashe.GetRequestCountTwoHours();
             RequestCountLabel.Content = $"Количество запросов сегодня: {requestCount}";
         }
+
         private async Task UpdateWeather(string city)
         {
             try
             {
-                int requestCount = WeatherCashe.GetRequestCountForToday();
-
-                if (requestCount >= 1000)
+                int requestCount = WeatherCashe.GetRequestCountTwoHours();
+                if (requestCount >= 400)
                 {
                     var cachedData = WeatherCashe.GetWeather(city);
                     if (cachedData.Count > 0)
@@ -120,7 +120,7 @@ namespace PR8_0202
                     }
                     else
                     {
-                        MessageBox.Show("Лимит запросов на сегодня превышен");
+                        MessageBox.Show("Лимит запросов на 2 часа превышен");
                     }
                 }
                 else
@@ -133,6 +133,7 @@ namespace PR8_0202
                             data.WindSpeed, data.FeelsLike, data.WeatherDescription);
                     }
                 }
+                WeatherCashe.IncrementRecuestCount();
             }
             catch (Exception ex)
             {
